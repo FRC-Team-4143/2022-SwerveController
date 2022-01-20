@@ -8,7 +8,7 @@
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/velocity.h>
-
+#include <iostream>
 #include "Constants.h"
 
 using namespace DriveConstants;
@@ -19,24 +19,26 @@ DriveSubsystem::DriveSubsystem()
                   kFrontLeftDriveEncoderPorts,
                   kFrontLeftTurningEncoderPorts,
                   kFrontLeftDriveEncoderReversed,
-                  kFrontLeftTurningEncoderReversed},
+                  kFrontLeftTurningEncoderReversed, "frontLeft"},
 
       m_rearLeft{
           kRearLeftDriveMotorPort,       kRearLeftTurningMotorPort,
           kRearLeftDriveEncoderPorts,    kRearLeftTurningEncoderPorts,
-          kRearLeftDriveEncoderReversed, kRearLeftTurningEncoderReversed},
+          kRearLeftDriveEncoderReversed, kRearLeftTurningEncoderReversed, "rearLeft"},
 
       m_frontRight{
           kFrontRightDriveMotorPort,       kFrontRightTurningMotorPort,
           kFrontRightDriveEncoderPorts,    kFrontRightTurningEncoderPorts,
-          kFrontRightDriveEncoderReversed, kFrontRightTurningEncoderReversed},
+          kFrontRightDriveEncoderReversed, kFrontRightTurningEncoderReversed, "frontRight"},
 
       m_rearRight{
           kRearRightDriveMotorPort,       kRearRightTurningMotorPort,
           kRearRightDriveEncoderPorts,    kRearRightTurningEncoderPorts,
-          kRearRightDriveEncoderReversed, kRearRightTurningEncoderReversed},
+          kRearRightDriveEncoderReversed, kRearRightTurningEncoderReversed, "rearRight"},
 
-      m_odometry{kDriveKinematics, m_gyro.GetRotation2d(), frc::Pose2d()} {}
+      m_odometry{kDriveKinematics, m_gyro.GetRotation2d(), frc::Pose2d()} {
+        LoadWheelOffsets();
+      }
 
 void DriveSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
@@ -98,6 +100,28 @@ frc::Pose2d DriveSubsystem::GetPose() {
 }
 
 void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
-  m_odometry.ResetPosition(pose,
-                           frc::Rotation2d(units::degree_t(GetHeading())));
+  m_odometry.ResetPosition(pose, frc::Rotation2d(units::degree_t(GetHeading())));
 }
+
+// ================================================================
+
+void DriveSubsystem::SetWheelOffsets() {
+	m_frontLeft.SetWheelOffset();
+	m_rearLeft.SetWheelOffset();
+	m_frontRight.SetWheelOffset();
+	m_rearRight.SetWheelOffset();
+  std::cout << "SetWheelOffsets Complete " << std::endl;
+		std::cout.flush();
+}
+
+// ================================================================
+
+void DriveSubsystem::LoadWheelOffsets() {
+	m_frontLeft.LoadWheelOffset();
+	m_rearLeft.LoadWheelOffset();
+	m_frontRight.LoadWheelOffset();
+	m_rearRight.LoadWheelOffset();
+}
+
+// ================================================================
+

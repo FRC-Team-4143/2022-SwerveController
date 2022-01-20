@@ -83,7 +83,7 @@ constexpr double kTurningEncoderDistancePerPulse =
     // Assumes the encoders are directly mounted on the wheel shafts
     (wpi::numbers::pi * 2) / static_cast<double>(kEncoderCPR);
 
-constexpr double kPModuleTurningController = 0.1;
+constexpr double kPModuleTurningController = 0.5;
 constexpr double kPModuleDriveController = 1;
 }  // namespace ModuleConstants
 

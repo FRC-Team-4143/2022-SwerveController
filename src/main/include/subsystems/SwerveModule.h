@@ -13,6 +13,8 @@
 #include <frc/trajectory/TrapezoidProfile.h>
 #include <wpi/numbers>
 #include <ctre/Phoenix.h>
+#include <string>
+#include <frc/Preferences.h>
 
 #include "Constants.h"
 
@@ -24,13 +26,16 @@ class SwerveModule {
  public:
   SwerveModule(int driveMotorChannel, int turningMotorChannel,
                const int driveEncoderPorts[2], const int turningEncoderPorts[2],
-               bool driveEncoderReversed, bool turningEncoderReversed);
+               bool driveEncoderReversed, bool turningEncoderReversed, std::string name);
 
   frc::SwerveModuleState GetState();
 
   void SetDesiredState(const frc::SwerveModuleState& state);
 
   void ResetEncoders();
+
+  void SetWheelOffset();
+  void LoadWheelOffset();
 
  private:
   // We have to use meters here instead of radians due to the fact that
@@ -53,6 +58,8 @@ class SwerveModule {
   bool m_reverseDriveEncoder;
   bool m_reverseTurningEncoder;
 
+  std::string m_name;
+
   frc2::PIDController m_drivePIDController{
       ModuleConstants::kPModuleDriveController, 0, 0};
   frc::ProfiledPIDController<units::radians> m_turningPIDController{
@@ -60,4 +67,6 @@ class SwerveModule {
       0.0,
       0.0,
       {kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration}};
+
+  double m_offset;
 };

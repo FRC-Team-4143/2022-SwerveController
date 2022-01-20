@@ -17,7 +17,7 @@
 #include <frc2/command/button/JoystickButton.h>
 #include <units/angle.h>
 #include <units/velocity.h>
-
+#include <frc/smartdashboard/SmartDashboard.h>
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 
@@ -37,12 +37,14 @@ RobotContainer::RobotContainer() {
         m_drive.Drive(
             units::meters_per_second_t(m_driverController.GetLeftY()),
             units::meters_per_second_t(m_driverController.GetLeftX()),
-            units::radians_per_second_t(m_driverController.GetRightX()), false);
+            units::radians_per_second_t(m_driverController.GetRightX()*.5), false);
       },
       {&m_drive}));
 }
 
-void RobotContainer::ConfigureButtonBindings() {}
+void RobotContainer::ConfigureButtonBindings() {
+    frc::SmartDashboard::PutData("Set WheelOffsets", &m_SetWheelOffsets);
+}
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   // Set up config for trajectory

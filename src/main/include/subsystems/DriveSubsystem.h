@@ -99,6 +99,9 @@ class DriveSubsystem : public frc2::SubsystemBase {
       frc::Translation2d(-kWheelBase / 2, kTrackWidth / 2),
       frc::Translation2d(-kWheelBase / 2, -kTrackWidth / 2)};
 
+  void SetWheelOffsets();
+  void LoadWheelOffsets();
+  
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
@@ -114,4 +117,6 @@ class DriveSubsystem : public frc2::SubsystemBase {
   // Odometry class for tracking robot pose
   // 4 defines the number of modules
   frc::SwerveDriveOdometry<4> m_odometry;
+
+  
 };

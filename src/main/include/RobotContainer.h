@@ -30,6 +30,9 @@ class RobotContainer {
 
   frc2::Command* GetAutonomousCommand();
 
+  DriveSubsystem m_drive;
+  frc2::InstantCommand m_SetWheelOffsets{[this] {m_drive.SetWheelOffsets(); }, {&m_drive}};
+
  private:
   // The driver's controller
   frc::XboxController m_driverController{OIConstants::kDriverControllerPort};
@@ -37,7 +40,7 @@ class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   // The robot's subsystems
-  DriveSubsystem m_drive;
+  
 
   // The chooser for the autonomous routines
   frc::SendableChooser<frc2::Command*> m_chooser;

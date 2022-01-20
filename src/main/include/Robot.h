@@ -8,6 +8,8 @@
 #include <frc2/command/Command.h>
 
 #include "RobotContainer.h"
+#include <frc/RobotController.h>
+#include <iostream>
 
 class Robot : public frc::TimedRobot {
  public:
@@ -27,4 +29,7 @@ class Robot : public frc::TimedRobot {
   frc2::Command* m_autonomousCommand = nullptr;
 
   RobotContainer m_container;
+
+  int m_counter=0;
+  
 };
