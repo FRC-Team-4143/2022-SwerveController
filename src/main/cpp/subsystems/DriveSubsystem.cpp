@@ -10,41 +10,33 @@
 #include <units/velocity.h>
 #include <iostream>
 #include "Constants.h"
-
+#include <frc/smartdashboard/SmartDashboard.h>
 using namespace DriveConstants;
 
 DriveSubsystem::DriveSubsystem()
-    : m_frontLeft{kFrontLeftDriveMotorPort,
-                  kFrontLeftTurningMotorPort,
-                  kFrontLeftDriveEncoderPorts,
-                  kFrontLeftTurningEncoderPorts,
-                  kFrontLeftDriveEncoderReversed,
-                  kFrontLeftTurningEncoderReversed, "frontLeft"},
+    : m_gyro{},
+      m_frontLeft{kFrontLeftDriveMotorPort, kFrontLeftTurningMotorPort, "frontLeft"},
 
-      m_rearLeft{
-          kRearLeftDriveMotorPort,       kRearLeftTurningMotorPort,
-          kRearLeftDriveEncoderPorts,    kRearLeftTurningEncoderPorts,
-          kRearLeftDriveEncoderReversed, kRearLeftTurningEncoderReversed, "rearLeft"},
+      m_rearLeft{kRearLeftDriveMotorPort, kRearLeftTurningMotorPort, "rearLeft"},
 
-      m_frontRight{
-          kFrontRightDriveMotorPort,       kFrontRightTurningMotorPort,
-          kFrontRightDriveEncoderPorts,    kFrontRightTurningEncoderPorts,
-          kFrontRightDriveEncoderReversed, kFrontRightTurningEncoderReversed, "frontRight"},
+      m_frontRight{kFrontRightDriveMotorPort, kFrontRightTurningMotorPort, "frontRight"},
 
-      m_rearRight{
-          kRearRightDriveMotorPort,       kRearRightTurningMotorPort,
-          kRearRightDriveEncoderPorts,    kRearRightTurningEncoderPorts,
-          kRearRightDriveEncoderReversed, kRearRightTurningEncoderReversed, "rearRight"},
+      m_rearRight{kRearRightDriveMotorPort, kRearRightTurningMotorPort, "rearRight"},
 
-      m_odometry{kDriveKinematics, m_gyro.GetRotation2d(), frc::Pose2d()} {
+      m_odometry{kDriveKinematics, units::degree_t(-m_gyro.GetAngle()), frc::Pose2d()} {
         LoadWheelOffsets();
+        m_gyro.Calibrate();
+        m_gyro.SetYawAxis(frc::ADIS16470_IMU::IMUAxis::kZ);
       }
 
 void DriveSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
-  m_odometry.Update(m_gyro.GetRotation2d(), m_frontLeft.GetState(),
+  m_odometry.Update(units::degree_t(-m_gyro.GetAngle()), m_frontLeft.GetState(),
                     m_rearLeft.GetState(), m_frontRight.GetState(),
                     m_rearRight.GetState());
+  frc::SmartDashboard::PutNumber ("Gyro",m_gyro.GetAngle().value());
+                     
+
 }
 
 void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
@@ -53,10 +45,11 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
                            bool fieldRelative) {
   auto states = kDriveKinematics.ToSwerveModuleStates(
       fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-                          xSpeed, ySpeed, rot, m_gyro.GetRotation2d())
+                          xSpeed, ySpeed, rot, units::degree_t(-m_gyro.GetAngle()))
                     : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
 
   kDriveKinematics.DesaturateWheelSpeeds(&states, AutoConstants::kMaxSpeed);
+
 
   auto [fl, fr, bl, br] = states;
 
@@ -84,7 +77,7 @@ void DriveSubsystem::ResetEncoders() {
 }
 
 units::degree_t DriveSubsystem::GetHeading() const {
-  return m_gyro.GetRotation2d().Degrees();
+  return units::degree_t(-m_gyro.GetAngle());
 }
 
 void DriveSubsystem::ZeroHeading() {
@@ -92,7 +85,7 @@ void DriveSubsystem::ZeroHeading() {
 }
 
 double DriveSubsystem::GetTurnRate() {
-  return -m_gyro.GetRate();
+  return -m_gyro.GetRate().value();
 }
 
 frc::Pose2d DriveSubsystem::GetPose() {

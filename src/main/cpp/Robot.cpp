@@ -3,12 +3,13 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "Robot.h"
-
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
+#include <frc/shuffleboard/Shuffleboard.h>
+
 
 void Robot::RobotInit() {
-  
+  frc::Shuffleboard::GetTab("SmartDashboard").Add(m_container.m_drive.m_gyro);
 }
 
 /**
@@ -34,7 +35,7 @@ void Robot::RobotPeriodic() {
 			m_counter -= 1;
 		}
 
-    
+   
 }
 
 /**

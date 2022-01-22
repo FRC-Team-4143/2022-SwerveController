@@ -15,18 +15,15 @@
 #include <ctre/Phoenix.h>
 #include <string>
 #include <frc/Preferences.h>
-
 #include "Constants.h"
 
 class SwerveModule {
   using radians_per_second_squared_t =
       units::compound_unit<units::radians,
-                           units::inverse<units::squared<units::second>>>;
+      units::inverse<units::squared<units::second>>>;
 
  public:
-  SwerveModule(int driveMotorChannel, int turningMotorChannel,
-               const int driveEncoderPorts[2], const int turningEncoderPorts[2],
-               bool driveEncoderReversed, bool turningEncoderReversed, std::string name);
+  SwerveModule(int driveMotorChannel, int turningMotorChannel, std::string name);
 
   frc::SwerveModuleState GetState();
 
@@ -46,17 +43,11 @@ class SwerveModule {
       units::radians_per_second_t(wpi::numbers::pi);  // radians per second
   static constexpr units::unit_t<radians_per_second_squared_t>
       kModuleMaxAngularAcceleration =
-          units::unit_t<radians_per_second_squared_t>(
-              wpi::numbers::pi * 2.0);  // radians per second squared
+        units::unit_t<radians_per_second_squared_t>(
+        wpi::numbers::pi * 2.0);  // radians per second squared
 
   WPI_TalonSRX m_driveMotor;
   WPI_TalonSRX m_turningMotor;
-
-  frc::Encoder m_driveEncoder;
-  frc::Encoder m_turningEncoder;
-
-  bool m_reverseDriveEncoder;
-  bool m_reverseTurningEncoder;
 
   std::string m_name;
 
@@ -69,4 +60,5 @@ class SwerveModule {
       {kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration}};
 
   double m_offset;
+
 };

@@ -73,7 +73,7 @@ constexpr double kPRearRightVel = 0.5;
 
 namespace ModuleConstants {
 constexpr int kEncoderCPR = 1024;
-constexpr double kWheelDiameterMeters = 0.15;
+constexpr double kWheelDiameterMeters = 0.102;
 constexpr double kDriveEncoderDistancePerPulse =
     // Assumes the encoders are directly mounted on the wheel shafts
     (kWheelDiameterMeters * wpi::numbers::pi) /
@@ -92,7 +92,7 @@ using radians_per_second_squared_t =
     units::compound_unit<units::radians,
                          units::inverse<units::squared<units::second>>>;
 
-constexpr auto kMaxSpeed = units::meters_per_second_t(3);
+constexpr auto kMaxSpeed = units::meters_per_second_t(6.5965);
 constexpr auto kMaxAcceleration = units::meters_per_second_squared_t(3);
 constexpr auto kMaxAngularSpeed = units::radians_per_second_t(3.142);
 constexpr auto kMaxAngularAcceleration =

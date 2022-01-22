@@ -35,15 +35,16 @@ RobotContainer::RobotContainer() {
   m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
         m_drive.Drive(
-            units::meters_per_second_t(m_driverController.GetLeftY()),
-            units::meters_per_second_t(m_driverController.GetLeftX()),
-            units::radians_per_second_t(m_driverController.GetRightX()*.5), false);
+            units::meters_per_second_t(m_driverController.GetLeftY()*AutoConstants::kMaxSpeed),
+            units::meters_per_second_t(m_driverController.GetLeftX()*AutoConstants::kMaxSpeed),
+            units::radians_per_second_t(m_driverController.GetRightX()*8), false);
       },
       {&m_drive}));
 }
 
 void RobotContainer::ConfigureButtonBindings() {
     frc::SmartDashboard::PutData("Set WheelOffsets", &m_SetWheelOffsets);
+    
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
