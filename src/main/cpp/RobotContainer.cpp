@@ -23,6 +23,24 @@
 
 using namespace DriveConstants;
 
+const uint32_t JOYSTICK_LX_AXIS = 0;
+const uint32_t JOYSTICK_LY_AXIS = 1;
+const uint32_t JOYSTICK_LTRIG_AXIS = 2;
+const uint32_t JOYSTICK_RTRIG_AXIS = 3;
+const uint32_t JOYSTICK_RX_AXIS = 4;
+const uint32_t JOYSTICK_RY_AXIS = 5;
+
+const uint32_t JOYSTICK_BUTTON_A = 1;
+const uint32_t JOYSTICK_BUTTON_B = 2;
+const uint32_t JOYSTICK_BUTTON_X = 3;
+const uint32_t JOYSTICK_BUTTON_Y = 4;
+const uint32_t JOYSTICK_BUTTON_LB = 5;
+const uint32_t JOYSTICK_BUTTON_RB = 6;
+const uint32_t JOYSTICK_BUTTON_BACK = 7;
+const uint32_t JOYSTICK_BUTTON_START = 8;
+const uint32_t JOYSTICK_BUTTON_LEFT = 9;
+const uint32_t JOYSTICK_BUTTON_RIGHT = 10;
+
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
 
@@ -32,19 +50,15 @@ RobotContainer::RobotContainer() {
   // Set up default drive command
   // The left stick controls translation of the robot.
   // Turning is controlled by the X axis of the right stick.
-  m_drive.SetDefaultCommand(frc2::RunCommand(
-      [this] {
-        m_drive.Drive(
-            units::meters_per_second_t(m_driverController.GetLeftY()*AutoConstants::kMaxSpeed),
-            units::meters_per_second_t(m_driverController.GetLeftX()*AutoConstants::kMaxSpeed),
-            units::radians_per_second_t(m_driverController.GetRightX()*8), false);
-      },
-      {&m_drive}));
+  m_drive.SetDefaultCommand(m_FieldCentricMode);
+
 }
 
 void RobotContainer::ConfigureButtonBindings() {
     frc::SmartDashboard::PutData("Set WheelOffsets", &m_SetWheelOffsets);
-    
+    frc::SmartDashboard::PutData("Zero Yaw", &m_ZeroYaw);
+ 
+    (new frc2::JoystickButton(&m_driverController, JOYSTICK_BUTTON_LEFT))->ToggleWhenPressed(m_CrabMode);
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {

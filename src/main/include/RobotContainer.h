@@ -32,6 +32,23 @@ class RobotContainer {
 
   DriveSubsystem m_drive;
   frc2::InstantCommand m_SetWheelOffsets{[this] {m_drive.SetWheelOffsets(); }, {&m_drive}};
+  frc2::InstantCommand m_ZeroYaw{[this] {m_drive.ZeroHeading(); }, {&m_drive}};
+  frc2::RunCommand m_FieldCentricMode{[this] {
+        m_drive.Drive(
+            units::meters_per_second_t(m_driverController.GetLeftY()*AutoConstants::kMaxSpeed),
+            units::meters_per_second_t(m_driverController.GetLeftX()*AutoConstants::kMaxSpeed),
+            units::radians_per_second_t(m_driverController.GetRightX()*8), true);
+      },
+      {&m_drive}
+  };
+  frc2::RunCommand m_CrabMode{[this] {
+        m_drive.Drive(
+            units::meters_per_second_t(m_driverController.GetLeftY()*AutoConstants::kMaxSpeed),
+            units::meters_per_second_t(m_driverController.GetLeftX()*AutoConstants::kMaxSpeed),
+            units::radians_per_second_t(m_driverController.GetRightX()*8), false);
+      },
+      {&m_drive}
+  };
 
  private:
   // The driver's controller

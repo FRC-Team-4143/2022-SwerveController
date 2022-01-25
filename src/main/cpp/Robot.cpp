@@ -9,7 +9,7 @@
 
 
 void Robot::RobotInit() {
-  frc::Shuffleboard::GetTab("SmartDashboard").Add(m_container.m_drive.m_gyro);
+
 }
 
 /**

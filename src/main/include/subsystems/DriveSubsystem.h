@@ -5,7 +5,6 @@
 #pragma once
 
 //#include <frc/ADXRS450_Gyro.h>
-#include <frc/ADIS16470_IMU.h>
 #include <frc/Encoder.h>
 #include <frc/drive/MecanumDrive.h>
 #include <frc/geometry/Pose2d.h>
@@ -16,7 +15,7 @@
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc/motorcontrol/PWMSparkMax.h>
 #include <frc2/command/SubsystemBase.h>
-
+#include <AHRS.h>
 #include "Constants.h"
 #include "SwerveModule.h"
 
@@ -101,9 +100,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
   void LoadWheelOffsets();
 
    // The gyro sensor
-  //frc::ADXRS450_Gyro m_gyro;
-  frc::ADIS16470_IMU m_gyro;
-  
+  AHRS *m_gyro;
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
